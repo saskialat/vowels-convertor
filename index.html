@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <title>Replace the Vowels:3</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Replace the Vowels<br> :3</h1>
+      <div class="input-container">
+        <h3>Consonant:</h3>
+        <input placeholder= "B/C/D/F/G/H/J/K/L/M/N/P/Q/R/S/T/V/W/X/Y/Z"type="text" class="message-input" id="recipient" required/> <!--required recipient-->
+        <h3>Message:</h3>
+        <textarea rows="3" class="message-input" id="content" > </textarea>
+      </div>
+      <div class="button-container">
+        <button class="button" id="submit-post">awrakadawra(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧</button>
+      </div>
+      <h2>Messages</h2>
+      <h5>Guess what's going on here♪┏ ( ･o･) ┛♪┗ (･o･ ) ┓♪┏(･o･)┛♪ </h5> <!--How can I change the design-->
+      <div class="message-container" id="message-container"></div>
+    </div>
+  </body>
+  <script>
+    $(document).ready(function() {
+      $.ajax({
+        url: "http://localhost:8000/posts",
+        crossDomain: true,
+        dataType: "json",
+      })
+      .done(function(data) {
+        $.each(data["posts"], function(index, message) {
+          $("#message-container").append("<div class='message-item' data-id='" + message.id+ "'><h4>To: " + message.recipient + "</h4><p>"+ message.content +"</p></div>");
+        });
+      });
+      
+      $("#submit-post").click(function() {
+        var recipient = $("#recipient");
+        var content = $("#content");
+        $.ajax({ 
+            url: "http://localhost:8000/posts",
+            data: {"content": content.val(), "recipient": recipient.val()},
+            type: "POST",
+            success: function(message) {
+              location.reload();
+            }
+        });
+      });
+    });
+  </script>
+</html>
